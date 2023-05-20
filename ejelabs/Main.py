@@ -65,6 +65,10 @@ class A():
         encrypted = base64.b64encode(encrypted).decode('utf-8')
         return f'#PWD_INSTAGRAM_BROWSER:{version}:{time}:{encrypted}'
 
+    def _encbsc(self,  pw) -> None:
+        time = int(datetime.datetime.now().timestamp())
+        return f'#PWD_INSTAGRAM:0:{time}:{[pw]}'
+
     def _generate(self, seed: Union[str, bytes]) -> None:
         rand = random.Random(seed + str(datetime.date.today()))
         phone_id = str(UUID(int=rand.getrandbits(128), version=4))
@@ -73,7 +77,9 @@ class A():
         _uuid = str(UUID(int=rand.getrandbits(128), version=4))
         fdid = str(UUID(int=rand.getrandbits(128), version=4))
         jazoest = self._jazoest(phone_id)
-        return id, phone_id, adid, _uuid, fdid, jazoest
+        _sessid = f'UFS-{UUID(int=rand.getrandbits(128))}-0'
+        _time = str(round(time.time(), 3))
+        return _sessid, _time, id, phone_id, adid, _uuid, fdid, jazoest
 
     def _jazoest(self, phone_id) -> str:
         return f"2{sum(ord(i) for i in phone_id)}"
